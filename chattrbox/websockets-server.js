@@ -35,7 +35,5 @@ ws.on("connection", function(socket) {
         clientSocket.send(data);
       });
     }
-
-
   });
 });
