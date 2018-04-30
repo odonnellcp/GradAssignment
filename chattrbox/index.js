@@ -12,30 +12,30 @@ var handleError = function(err, res) {
 };
 
 var app = server();
-
 app.listen(8000);
 
 app.footer(function($) {
   console.log("Responding to a request.");
   var pathname = $.url.pathname;
   var extension = path.extname(pathname);
-  var source = app.path + pathname;
-  var mimeType = mime.getType(source);
-  console.log(mimeType);
-  if (extension) {
-    fs.readFile(source, function(error, data) {
-      if (!error) {
+  var filePath = app.path + pathname;
+  console.log("Full file path is " + "'" + filePath + "'");
+  var mimeType = mime.getType(filePath);
+  console.log("MIME Type is " + "'" + mimeType + "'");
+  if (extension){
+    fs.readFile(filePath, function(err, data){
+      if (err){
+        console.log("Load Error Page");
+        handleError(err, $);
+        $.return();
+      }else{
         console.log("No error");
         $.header("Content-Type", mimeType);
         $.end(data);
         $.return();
-      } else {
-        console.log("Error Page");
-        handleError(error, $);
-        $.return();
       }
     });
-  } else {
+  }else {
     $.return();
   }
 });
