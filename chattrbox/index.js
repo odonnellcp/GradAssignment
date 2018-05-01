@@ -4,10 +4,11 @@ var server = require("diet");
 var wss = require("./websockets-server");
 var mime = require("mime");
 
-var handleError = function(err, res) {
+var handleError = function(err, $) {
   fs.readFile("app/error.html", function(err, data) {
-    console.log();
-    res.end(data);
+    $.send(data);
+    $.end();
+    $.return();
   });
 };
 
@@ -27,11 +28,11 @@ app.footer(function($) {
       if (err){
         console.log("Load Error Page");
         handleError(err, $);
-        $.return();
       }else{
         console.log("No error");
         $.header("Content-Type", mimeType);
-        $.end(data);
+        $.send(data);
+        $.end();
         $.return();
       }
     });
